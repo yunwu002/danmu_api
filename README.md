@@ -6,10 +6,11 @@
 LogVar 弹幕 API 服务器
 </h2>
 
-[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github)](https://github.com/huangxd-/danmu_api)
-![GitHub forks](https://img.shields.io/github/forks/huangxd-/danmu_api)
-![GitHub Repo stars](https://img.shields.io/github/stars/huangxd-/danmu_api)
-![GitHub License](https://img.shields.io/github/license/huangxd-/danmu_api)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github)](https://github.com/yunwu002/danmu_api)
+![GitHub forks](https://img.shields.io/github/forks/yunwu002/danmu_api)
+![GitHub Repo stars](https://img.shields.io/github/stars/yunwu002/danmu_api)
+![GitHub License](https://img.shields.io/github/license/yunwu002/danmu_api)
+
 ![Docker Image Version](https://img.shields.io/docker/v/logvar/danmu-api?sort=semver)
 ![Docker Pulls](https://img.shields.io/docker/pulls/logvar/danmu-api)
 [![telegram](https://img.shields.io/static/v1?label=telegram&message=telegram_channel&color=blue)](https://t.me/logvar_danmu_channel)

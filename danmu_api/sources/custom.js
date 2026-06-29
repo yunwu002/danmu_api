@@ -21,23 +21,23 @@ export default class CustomSource extends BaseSource {
 
       // 判断 resp 和 resp.data 是否存在
       if (!resp || !resp.data) {
-        log("info", "customSourceSearchresp: 请求失败或无数据返回");
+        log("info", "[Custom] customSourceSearchresp: 请求失败或无数据返回");
         return [];
       }
 
       // 判断 seriesData 是否存在
       if (!resp.data.animes) {
-        log("info", "customSourceSearchresp: seriesData 或 seriesList 不存在");
+        log("info", "[Custom] customSourceSearchresp: seriesData 或 seriesList 不存在");
         return [];
       }
 
       // 正常情况下输出 JSON 字符串
-      log("info", `customnSourceSearchresp: ${JSON.stringify(resp.data.animes)}`);
+      log("info", `[Custom] 搜索找到 ${resp.data.animes.length} 个有效结果`);
 
       return resp.data.animes;
     } catch (error) {
       // 捕获请求中的错误
-      log("error", "getCustomSourceAnimes error:", {
+      log("error", "[Custom] getCustomSourceAnimes error:", {
         message: error.message,
         name: error.name,
         stack: error.stack,
@@ -57,23 +57,23 @@ export default class CustomSource extends BaseSource {
 
       // 判断 resp 和 resp.data 是否存在
       if (!resp || !resp.data) {
-        log("info", "getCustomSourceEposides: 请求失败或无数据返回");
+        log("info", "[Custom] getCustomSourceEposides: 请求失败或无数据返回");
         return [];
       }
 
       // 判断 seriesData 是否存在
       if (!resp.data.bangumi || !resp.data.bangumi.episodes) {
-        log("info", `getCustomSourceEposides: episodes 不存在. Response: ${JSON.stringify(resp.data)}`);
+        log("info", `[Custom] getCustomSourceEposides: episodes 不存在. Response: ${JSON.stringify(resp.data)}`);
         return [];
       }
 
       // 正常情况下输出 JSON 字符串
-      log("info", `getCustomSourceEposides: ${JSON.stringify(resp.data.bangumi.episodes)}`);
+      log("info", `[Custom] getCustomSourceEposides: ${JSON.stringify(resp.data.bangumi.episodes)}`);
 
       return resp.data.bangumi.episodes;
     } catch (error) {
       // 捕获请求中的错误
-      log("error", "getCustomSourceEposides error:", {
+      log("error", "[Custom] getCustomSourceEposides error:", {
         message: error.message,
         name: error.name,
         stack: error.stack,
@@ -82,12 +82,12 @@ export default class CustomSource extends BaseSource {
     }
   }
 
-  async handleAnimes(sourceAnimes, queryTitle, curAnimes) {
+  async handleAnimes(sourceAnimes, queryTitle, curAnimes, detailStore = null) {
     const tmpAnimes = [];
 
     // 添加错误处理，确保sourceAnimes是数组
     if (!sourceAnimes || !Array.isArray(sourceAnimes)) {
-      log("error", "[Custom Source] sourceAnimes is not a valid array");
+      log("error", "[Custom] sourceAnimes is not a valid array");
       return [];
     }
 
@@ -123,12 +123,12 @@ export default class CustomSource extends BaseSource {
 
             tmpAnimes.push(transformedAnime);
 
-            addAnime({...transformedAnime, links: links});
+            addAnime({...transformedAnime, links: links}, detailStore);
 
             if (globals.animes.length > globals.MAX_ANIMES) removeEarliestAnime();
           }
         } catch (error) {
-          log("error", `[Custom Source] Error processing anime: ${error.message}`);
+          log("error", `[Custom] Error processing anime: ${error.message}`);
         }
       })
     );
@@ -158,7 +158,7 @@ export default class CustomSource extends BaseSource {
       return allDanmus;
     } catch (error) {
       // 捕获请求中的错误
-      log("error", "fetchCustomSourceEpisodeDanmu error:", {
+      log("error", "[Custom] fetchCustomSourceEpisodeDanmu error:", {
         message: error.message,
         name: error.name,
         stack: error.stack,
@@ -168,7 +168,7 @@ export default class CustomSource extends BaseSource {
   }
 
   async getEpisodeDanmuSegments(id) {
-    log("info", "获取Custom Source弹幕分段列表...", id);
+    log("info", "[Custom] 获取Custom Source弹幕分段列表...", id);
 
     return new SegmentListResponse({
       "type": "custom",
@@ -196,8 +196,8 @@ export default class CustomSource extends BaseSource {
         const decimalColor = r * 256 * 256 + g * 256 + b;
         return `${platform}${decimalColor}`;
       })}`,
-      // 根据 globals.danmuSimplified 控制是否繁转简
-      m: globals.danmuSimplified ? simplized(c.m) : c.m,
+      // 根据 globals.danmuSimplifiedTraditional 控制是否繁转简
+      m: globals.danmuSimplifiedTraditional === 'simplified' ? simplized(c.m) : c.m,
     }));
   }
 }
